@@ -1,0 +1,74 @@
+1)	import pandas as pd
+
+pd.set_option('display.max_rows', 250)
+pd.set_option('display.max_columns', 100)
+pd.set_option('display.width', 1000)
+df = pd.read_csv('./column_2C_weka.csv')
+df['class'] = pd.factorize(df['class'])[0]
+y = df['class']
+df.drop(['lumbar_lordosis_angle', 'sacral_slope', 'pelvic_radius'], axis=1, inplace=True)
+from sklearn.model_selection import train_test_split
+X_train, X_holdout, y_train, y_holdout = train_test_split(df.values, y, test_size=0.4, random_state=10)
+from sklearn.neighbors import KNeighborsClassifier
+knn = KNeighborsClassifier(n_neighbors=10)
+knn.fit(X_train, y_train)
+knn_pred = knn.predict(X_holdout)
+from sklearn.metrics import accuracy_score
+accuracy = accuracy_score(y_holdout, knn_pred)
+print(accuracy)
+Вывод: 0.8306451612903226
+
+2)	При knn = KNeighborsClassifier(n_neighbors=10, weights='distance')
+Вывод: 0.8387096774193549
+3)	При knn = KNeighborsClassifier(n_neighbors=10, weights='distance', metric='manhattan')
+Вывод: 0.8790322580645161
+4)	Увеличим количество соседей knn = KNeighborsClassifier(n_neighbors=15, weights='distance', metric='manhattan')
+Вывод: 0.8870967741935484
+
+
+import pandas as pd
+
+pd.set_option('display.max_rows', 250)
+pd.set_option('display.max_columns', 100)
+pd.set_option('display.width', 1000)
+df = pd.read_csv('./column_2C_weka.csv')
+
+df['class'] = pd.factorize(df['class'])[0]
+y = df['class']
+df.drop(['pelvic_incidence', 'sacral_slope'], axis=1, inplace=True)
+from sklearn.model_selection import train_test_split
+X_train, X_holdout, y_train, y_holdout = train_test_split(df.values, y, test_size=0.4, random_state=10)
+from sklearn.neighbors import KNeighborsClassifier
+knn = KNeighborsClassifier(n_neighbors=15, weights='distance', metric='manhattan')
+knn.fit(X_train, y_train)
+knn_pred = knn.predict(X_holdout)
+from sklearn.metrics import accuracy_score
+accuracy = accuracy_score(y_holdout, knn_pred)
+print(accuracy)
+Вывод: 0.9193548387096774
+
+
+
+
+
+Наилучшая модель:
+import pandas as pd
+
+pd.set_option('display.max_rows', 250)
+pd.set_option('display.max_columns', 100)
+pd.set_option('display.width', 1000)
+df = pd.read_csv('./column_2C_weka.csv')
+
+df['class'] = pd.factorize(df['class'])[0]
+y = df['class']
+df.drop(['pelvic_incidence', 'sacral_slope'], axis=1, inplace=True)
+from sklearn.model_selection import train_test_split
+X_train, X_holdout, y_train, y_holdout = train_test_split(df.values, y, test_size=0.4, random_state=10)
+from sklearn.neighbors import KNeighborsClassifier
+knn = KNeighborsClassifier(n_neighbors=16, weights='distance', metric='manhattan')
+knn.fit(X_train, y_train)
+knn_pred = knn.predict(X_holdout)
+from sklearn.metrics import accuracy_score
+accuracy = accuracy_score(y_holdout, knn_pred)
+print(accuracy)
+Вывод: 0.9274193548387096
